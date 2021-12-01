@@ -34,9 +34,11 @@ public class Main extends ListenerAdapter
 {
     private static JDA globalJDA;
     public static void main( String[] args ) throws LoginException, InterruptedException, SchedulerException, IOException {
-        int daysUntilXMAS = ChristmasCountdown.getDaysUntil(Calendar.DECEMBER, 25);
+//        int daysUntilXMAS = ChristmasCountdown.getDaysUntil(Calendar.DECEMBER, 25);
+        ChristmasCountdown xmas = new ChristmasCountdown();
         JDA jda = JDABuilder.createDefault(getField("bot.token"))
-                        .setActivity(Activity.playing(daysUntilXMAS + " Days until XMas"))
+//                        .setActivity(Activity.playing(daysUntilXMAS + " Days until XMas"))
+                .setActivity(Activity.playing(xmas.days() + " days, " + xmas.hours() + " hours, " + xmas.minutes() + " minutes, " + xmas.seconds() + " seconds until Christmas"))
                 .enableIntents(GatewayIntent.GUILD_MEMBERS)
                                 .build();
         jda.addEventListener(new Main(), new Commands());
@@ -50,7 +52,7 @@ public class Main extends ListenerAdapter
         commands.addCommands(
                 new CommandData("test", "Test a response")
         );
-
+        
         commands.addCommands(
                 new CommandData("addbirthday", "Add someone's birthday to the database")
                         .addOptions(new OptionData(OptionType.USER, "user", "The user whose birthday you wish to add").setRequired(true))
@@ -72,7 +74,7 @@ public class Main extends ListenerAdapter
 //        bdayM.addBirthday("fdffasf", 5, 20);
 //        bdayM.updateBirthday("fdasf", 4, 15);
 //        System.out.println("number of bday " + bdayM.numberOfBirthdays());
-        System.out.println(ChristmasCountdown.newGetTimeUntil(Calendar.DECEMBER, 25));
+//        System.out.println(ChristmasCountdown.newGetTimeUntil(Calendar.DECEMBER, 25));
 
     }
 

@@ -1,50 +1,41 @@
 package org.bolt.discordbot;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.text.ParseException;
+import java.util.concurrent.TimeUnit;
 
 public class ChristmasCountdown
 {
-    public static int getDaysUntil(int month, int day) {
-
-        Calendar calendar = Calendar.getInstance();
-        int today = calendar.get(Calendar.DAY_OF_YEAR);
-
-        calendar.set(Calendar.MONTH, month);
-        calendar.set(Calendar.DAY_OF_MONTH, day);
-        int desiredDay = calendar.get(Calendar.DAY_OF_YEAR);
-
-        int difference = desiredDay - today;
-
-        if (difference <= 0) {
-
-            calendar.set(Calendar.MONTH, 11);
-            calendar.set(Calendar.DAY_OF_MONTH, 31);
-            int daysUntilEnd = calendar.get(Calendar.DAY_OF_YEAR) - today;
-
-
-            calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) + 1);
-            calendar.set(Calendar.MONTH, month);
-            calendar.set(Calendar.DAY_OF_MONTH, day);
-            desiredDay = calendar.get(Calendar.DAY_OF_YEAR);
-
-            difference = daysUntilEnd + desiredDay;
-        }
-
-        return difference;
-    }
-    public static String newGetTimeUntil(int month, int day)
+    private long diff;
+    public ChristmasCountdown()
     {
-        Calendar today = Calendar.getInstance();
-        Calendar target = new GregorianCalendar();
+        String dateStop = "21/12/25 00:00:00";
 
-        target.set(Calendar.MONTH, month);
-        target.set(Calendar.DAY_OF_MONTH, day);
+        // Custom date format
+        SimpleDateFormat format = new SimpleDateFormat("yy/MM/dd HH:mm:ss");
 
-        long diffInMilli = target.getTimeInMillis() - today.getTimeInMillis();
-        return("Result: " + diffInMilli);
+        Date d2 = null;
+        try { d2 = format.parse(dateStop); } catch (ParseException e) { e.printStackTrace(); }
+        Date today = new Date();
 
-
+        diff = d2.getTime() - today.getTime();
     }
 
+    public long seconds()
+    {
+        return( TimeUnit.MILLISECONDS.toSeconds(diff) % 60 );
+    }
+    public long minutes()
+    {
+        return( TimeUnit.MILLISECONDS.toMinutes(diff) % 60 );
+    }
+    public long hours()
+    {
+        return( TimeUnit.MILLISECONDS.toHours(diff) % 24 );
+    }
+    public long days()
+    {
+        return( TimeUnit.MILLISECONDS.toDays(diff) );
+    }
 }
