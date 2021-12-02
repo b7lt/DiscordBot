@@ -8,26 +8,21 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-
-import javax.security.auth.login.LoginException;
-import javax.swing.text.html.Option;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Calendar;
-import java.util.Objects;
-import java.util.Properties;
-
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
-import org.bolt.discordbot.birthday.Birthday;
 import org.bolt.discordbot.birthday.BirthdayManager;
 import org.jetbrains.annotations.NotNull;
-import org.quartz.*;
+import org.quartz.SchedulerException;
+
+import javax.security.auth.login.LoginException;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Objects;
+import java.util.Properties;
 
 
 public class Main extends ListenerAdapter

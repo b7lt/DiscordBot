@@ -7,13 +7,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.text.ParseException;
 import java.util.concurrent.TimeUnit;
+import java.util.Calendar;
 
 public class ChristmasCountdown
 {
     private long diff;
     public ChristmasCountdown()
     {
-        String dateStop = "21/12/25 00:00:00";
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+        String dateStop = year + "/12/25 00:00:00";
 
         // Custom date format
         SimpleDateFormat format = new SimpleDateFormat("yy/MM/dd HH:mm:ss");
@@ -23,6 +25,17 @@ public class ChristmasCountdown
         Date today = new Date();
 
         diff = d2.getTime() - today.getTime();
+
+        if(diff < 0)
+        {
+            year += 1;
+            dateStop = year + "/12/25 00:00:00";
+            d2 = null;
+            try { d2 = format.parse(dateStop); } catch (ParseException e) { e.printStackTrace(); }
+            today = new Date();
+
+            diff = d2.getTime() - today.getTime();
+        }
     }
 
     public long seconds()

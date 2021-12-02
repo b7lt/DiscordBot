@@ -1,8 +1,5 @@
 package org.bolt.discordbot.birthday;
 
-import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.TextChannel;
-import org.bolt.discordbot.Main;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
