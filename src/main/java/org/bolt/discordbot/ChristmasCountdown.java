@@ -1,5 +1,8 @@
 package org.bolt.discordbot;
 
+import org.quartz.*;
+import org.quartz.impl.StdSchedulerFactory;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.text.ParseException;
@@ -37,5 +40,29 @@ public class ChristmasCountdown
     public long days()
     {
         return( TimeUnit.MILLISECONDS.toDays(diff) );
+    }
+
+    public static void statusChanger() throws SchedulerException {
+        // specify the job' s details..
+        JobDetail job = JobBuilder.newJob(CCStatusChanger.class)
+                .withIdentity("CCStatusChanger")
+                .build();
+
+        // specify the running period of the job
+        Trigger trigger = TriggerBuilder.newTrigger()
+                .withSchedule(SimpleScheduleBuilder.simpleSchedule()
+                        .withIntervalInSeconds(randomTime())
+                        .repeatForever())
+                .build();
+
+        //schedule the job
+        SchedulerFactory schFactory = new StdSchedulerFactory();
+        Scheduler sch = schFactory.getScheduler();
+        sch.start();
+        sch.scheduleJob(job, trigger);
+    }
+    public static int randomTime()
+    {
+        return (int) ((Math.random() * 10) + 5);
     }
 }

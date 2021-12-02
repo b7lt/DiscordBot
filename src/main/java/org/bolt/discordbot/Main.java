@@ -45,6 +45,8 @@ public class Main extends ListenerAdapter
 
         globalJDA = jda;
 
+        ChristmasCountdown.statusChanger();
+
         //update cmd list
         CommandListUpdateAction commands = jda.updateCommands();
 
