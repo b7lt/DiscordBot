@@ -87,7 +87,7 @@ public class Main extends ListenerAdapter
             System.out.printf("[%s][%s] %s: %s\n", event.getGuild().getName(),
                     event.getTextChannel().getName(), Objects.requireNonNull(event.getMember()).getEffectiveName(),
                     event.getMessage().getContentDisplay());
-            if(event.getAuthor().getId().equals("247392250470858752")) event.getTextChannel().sendMessage("frank kekw").queue();
+//            if(event.getAuthor().getId().equals("247392250470858752")) event.getTextChannel().sendMessage("frank kekw").queue();
         }
     }
 
