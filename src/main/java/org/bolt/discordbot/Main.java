@@ -72,24 +72,23 @@ public class Main extends ListenerAdapter
 //        bdayM.updateBirthday("fdasf", 4, 15);
 //        System.out.println("number of bday " + bdayM.numberOfBirthdays());
 //        System.out.println(ChristmasCountdown.newGetTimeUntil(Calendar.DECEMBER, 25));
-
     }
 
-    @Override
-    public void onMessageReceived(@NotNull MessageReceivedEvent event)
-    {
-        if(event.isFromType(ChannelType.PRIVATE))
-            System.out.printf("[PM] %s: %s\n",
-                    event.getAuthor().getName(),
-                    event.getMessage().getContentDisplay()
-            );
-        else {
-            System.out.printf("[%s][%s] %s: %s\n", event.getGuild().getName(),
-                    event.getTextChannel().getName(), Objects.requireNonNull(event.getMember()).getEffectiveName(),
-                    event.getMessage().getContentDisplay());
-//            if(event.getAuthor().getId().equals("247392250470858752")) event.getTextChannel().sendMessage("frank kekw").queue();
-        }
-    }
+//    @Override
+//    public void onMessageReceived(@NotNull MessageReceivedEvent event)
+//    {
+//        if(event.isFromType(ChannelType.PRIVATE))
+//            System.out.printf("[PM] %s: %s\n",
+//                    event.getAuthor().getName(),
+//                    event.getMessage().getContentDisplay()
+//            );
+//        else {
+//            System.out.printf("[%s][%s] %s: %s\n", event.getGuild().getName(),
+//                    event.getTextChannel().getName(), Objects.requireNonNull(event.getMember()).getEffectiveName(),
+//                    event.getMessage().getContentDisplay());
+////            if(event.getAuthor().getId().equals("247392250470858752")) event.getTextChannel().sendMessage("frank kekw").queue();
+//        }
+//    }
 
     @Override
     public void onGuildMemberJoin(@NotNull GuildMemberJoinEvent event)

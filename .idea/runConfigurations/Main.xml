@@ -3,7 +3,7 @@
     <option name="ALTERNATIVE_JRE_PATH" value="BUNDLED" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="MAIN_CLASS_NAME" value="org.bolt.discordbot.Main" />
-    <module name="DiscordBot" />
+    <module name="project" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="org.bolt.discordbot.birthday.*" />

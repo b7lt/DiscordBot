@@ -1,9 +1,11 @@
 package org.bolt.discordbot.birthday;
 
+import org.bolt.discordbot.Main;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -30,7 +32,6 @@ public class BirthdayManager
 //        birthdays.put(userId, month + " " + day);
 
         JSONArray list = new JSONArray();
-        list.put(birthdays.length() + 1);
         list.put(month);
         list.put(day);
         birthdays.put(userId, list);
@@ -44,6 +45,7 @@ public class BirthdayManager
 
         file.write(birthdays.toString(4));
         file.close();
+        System.out.println("Created birthday for " + Main.getBotInstance().getUserById(userId) + " on " + month + "/" + day);
 
 
 //        System.out.println(obj.toString(4));
@@ -57,6 +59,7 @@ public class BirthdayManager
         birthdays.remove(userId);
         file.write(birthdays.toString(4));
         file.close();
+        System.out.println("Deleted birthday for " + userId);
     }
 
     public void updateBirthday(String userId, int month, int day) throws IOException
@@ -66,6 +69,14 @@ public class BirthdayManager
         birthdays.put(userId, month + " " + day);
         file.write(birthdays.toString(4));
         file.close();
+    }
+
+    public int[] returnBirthday(String id)
+    {
+        int[] birthday = new int[2];
+        birthday[0] = (int) birthdays.getJSONArray(id).get(0);
+        birthday[1] = (int) birthdays.getJSONArray(id).get(1);
+        return birthday;
     }
 
     public int numberOfBirthdays()
