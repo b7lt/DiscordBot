@@ -33,14 +33,14 @@ public class Main extends ListenerAdapter
         ChristmasCountdown xmas = new ChristmasCountdown();
         JDA jda = JDABuilder.createDefault(getField("bot.token"))
 //                        .setActivity(Activity.playing(daysUntilXMAS + " Days until XMas"))
-                .setActivity(Activity.playing(xmas.days() + " days, " + xmas.hours() + " hours, " + xmas.minutes() + " minutes, " + xmas.seconds() + " seconds until Christmas"))
+//                .setActivity(Activity.playing(xmas.days() + " days, " + xmas.hours() + " hours, " + xmas.minutes() + " minutes, " + xmas.seconds() + " seconds until Christmas"))
                 .enableIntents(GatewayIntent.GUILD_MEMBERS)
                                 .build();
         jda.addEventListener(new Main(), new Commands());
 
         globalJDA = jda;
 
-        ChristmasCountdown.statusChanger();
+//        ChristmasCountdown.statusChanger();
 
         //update cmd list
         CommandListUpdateAction commands = jda.updateCommands();
@@ -60,6 +60,11 @@ public class Main extends ListenerAdapter
         commands.addCommands(
                 new CommandData("removebirthday", "Remove someone's birthday from the database")
                         .addOptions(new OptionData(OptionType.USER, "user", "The user whose birthday you wish to remove").setRequired(true))
+        );
+
+        commands.addCommands(
+                new CommandData("updatestatus", "Update the bot's status message")
+                        .addOptions(new OptionData(OptionType.STRING, "newstatus", "The new status message").setRequired(true))
         );
 
         commands.queue(); //queue it to discords servers
@@ -87,6 +92,15 @@ public class Main extends ListenerAdapter
 //                    event.getTextChannel().getName(), Objects.requireNonNull(event.getMember()).getEffectiveName(),
 //                    event.getMessage().getContentDisplay());
 ////            if(event.getAuthor().getId().equals("247392250470858752")) event.getTextChannel().sendMessage("frank kekw").queue();
+//        }
+//    }
+//
+//    @Override
+//    public void onMessageReceived(@NotNull MessageReceivedEvent event)
+//    {
+//        if(event.getAuthor().getId().equals("464507275189682176"))
+//        {
+//            event.getMessage().delete().queue();
 //        }
 //    }
 

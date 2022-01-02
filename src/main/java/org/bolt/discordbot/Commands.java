@@ -1,5 +1,6 @@
 package org.bolt.discordbot;
 
+import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.bolt.discordbot.birthday.BirthdayManager;
@@ -44,6 +45,12 @@ public class Commands extends ListenerAdapter
                     e.printStackTrace();
                     event.reply("Failed to remove birthday").setEphemeral(true).queue();
                 }
+                break;
+            }
+            case "updatestatus": {
+                String newStatus = event.getOption("newstatus").getAsString();
+                event.getJDA().getPresence().setActivity(Activity.playing(newStatus));
+                event.reply("Updated the bot's status to " + newStatus).setEphemeral(true).queue();
                 break;
             }
             default:
