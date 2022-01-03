@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.bolt.discordbot.birthday.BirthdayManager;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class Commands extends ListenerAdapter
 {
@@ -48,9 +49,10 @@ public class Commands extends ListenerAdapter
                 break;
             }
             case "updatestatus": {
-                String newStatus = event.getOption("newstatus").getAsString();
+                String newStatus = Objects.requireNonNull(event.getOption("newstatus")).getAsString();
                 event.getJDA().getPresence().setActivity(Activity.playing(newStatus));
                 event.reply("Updated the bot's status to " + newStatus).setEphemeral(true).queue();
+                System.out.println(event.getUser().getName() + " updated the bot's status to " + newStatus);
                 break;
             }
             default:
