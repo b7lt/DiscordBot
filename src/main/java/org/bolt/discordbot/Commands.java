@@ -3,6 +3,7 @@ package org.bolt.discordbot;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.components.ComponentInteraction;
 import org.bolt.discordbot.birthday.BirthdayManager;
 
 import java.io.IOException;
@@ -57,8 +58,8 @@ public class Commands extends ListenerAdapter
             }
             case "ghostping": {
                 String userId = event.getOption("idiot").getAsMember().getId();
-                event.getMessageChannel().sendMessage("<@!" + userId + ">").queue(message -> message.delete().queue());
-                event.reply("done").setEphemeral(true).queue();
+//                event.getMessageChannel().sendMessage("<@!" + userId + ">").queue(message -> message.delete().queue());
+                event.reply("<@!" + userId + ">").queue(m -> m.deleteOriginal().queue());
                 System.out.println(event.getUser().getName() + " ghost-pinged " + event.getOption("idiot").getAsMember().getEffectiveName());
                 break;
             }
