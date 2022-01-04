@@ -67,6 +67,11 @@ public class Main extends ListenerAdapter
                         .addOptions(new OptionData(OptionType.STRING, "newstatus", "The new status message").setRequired(true))
         );
 
+        commands.addCommands(
+                new CommandData("ghostping", "ghost ping an idiot")
+                        .addOptions(new OptionData(OptionType.USER, "idiot", "the idiot who u wanna ghost ping").setRequired(true))
+        );
+
         commands.queue(); //queue it to discords servers
 
         //Schedulers.cronJob();
@@ -119,7 +124,7 @@ public class Main extends ListenerAdapter
             textChannel.getHistory().retrievePast(1)
                     .map(messages -> messages.get(0)) // this assumes that the channel has at least 2 messages
                     .queue(message -> { // success callback
-                        System.out.println("The second most recent message is: " + message.getContentDisplay());
+//                        System.out.println("The second most recent message is: " + message.getContentDisplay());
                         int count = 1;
                         while(count<=5)
                         {

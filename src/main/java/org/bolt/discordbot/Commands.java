@@ -55,6 +55,12 @@ public class Commands extends ListenerAdapter
                 System.out.println(event.getUser().getName() + " updated the bot's status to " + newStatus);
                 break;
             }
+            case "ghostping": {
+                String userId = event.getOption("idiot").getAsMember().getId();
+                event.getMessageChannel().sendMessage("<@!" + userId + ">").queue(message -> message.delete().queue());
+                event.reply("done").setEphemeral(true).queue();
+                break;
+            }
             default:
                 event.reply("I can't handle that command right now :(").setEphemeral(true).queue();
         }
