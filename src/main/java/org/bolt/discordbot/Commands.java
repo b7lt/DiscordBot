@@ -59,6 +59,7 @@ public class Commands extends ListenerAdapter
                 String userId = event.getOption("idiot").getAsMember().getId();
                 event.getMessageChannel().sendMessage("<@!" + userId + ">").queue(message -> message.delete().queue());
                 event.reply("done").setEphemeral(true).queue();
+                System.out.println(event.getUser().getName() + " ghost-pinged " + event.getOption("idiot").getAsMember().getEffectiveName());
                 break;
             }
             default:
