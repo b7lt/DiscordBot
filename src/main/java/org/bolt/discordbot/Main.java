@@ -42,6 +42,7 @@ public class Main extends ListenerAdapter
                 .setChunkingFilter(ChunkingFilter.ALL)
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .enableCache(CacheFlag.ACTIVITY)
+                .enableCache(CacheFlag.EMOTE)
                 .addEventListeners(new Main())
 
                                 .build();
@@ -93,6 +94,11 @@ public class Main extends ListenerAdapter
 
         commands.addCommands(
                 new CommandData("kys", "suicide")
+        );
+
+        commands.addCommands(
+                new CommandData("emotesteal", "steal an emote from another server")
+                        .addOptions(new OptionData(OptionType.STRING, "emote", "steal this emote yo").setRequired(true))
         );
 
         commands.queue(); //queue it to discords servers

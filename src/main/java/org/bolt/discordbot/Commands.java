@@ -1,6 +1,8 @@
 package org.bolt.discordbot;
 
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Emote;
+import net.dv8tion.jda.api.entities.Icon;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -9,6 +11,9 @@ import org.bolt.discordbot.birthday.BirthdayManager;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.util.Base64;
 import java.util.Objects;
 
 public class Commands extends ListenerAdapter
@@ -116,6 +121,30 @@ public class Commands extends ListenerAdapter
             case "kys": {
                 Member member = event.getMember();
                 event.getGuild().kick(member, "suicide").queue();
+                break;
+            }
+
+            case "emotesteal":
+            {
+                String bruh = event.getOption("emote").getAsString();
+                String emoteName = bruh.substring(2, bruh.indexOf(":", 2));
+//                System.out.println(emoteName);
+                String emoteId = bruh.substring(bruh.indexOf(":", 2)+1, bruh.length()-1);
+//                String emoteId = bruh.substring(2, bruh.length()-1);
+//                System.out.println(emoteId);
+//                Emote emote = event.getJDA().getEmoteById(emoteId);
+
+                try {
+//                    java.net.URL url = new java.net.URL(emote.getImageUrl());
+                    String link = "https://cdn.discordapp.com/emojis/" + emoteId + ".webp?size=240&quality=lossless";
+                    java.net.URL url = new java.net.URL(link);
+                    InputStream is = url.openStream();
+                    event.getGuild().createEmote(emoteName, Icon.from(is)).queue();
+                    event.reply("added " + bruh + " (probaby)").setEphemeral(true).queue();
+                } catch (IOException e) {
+                    event.reply("done fucked up").setEphemeral(true).queue();
+                    throw new RuntimeException(e);
+                }
                 break;
             }
             default:
