@@ -1,15 +1,20 @@
 package org.bolt.discordbot.birthday;
 
 import org.bolt.discordbot.Main;
+import org.bolt.discordbot.TestJob;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.quartz.*;
+import org.quartz.impl.StdSchedulerFactory;
 
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Iterator;
 
 public class BirthdayManager
 {
@@ -31,9 +36,12 @@ public class BirthdayManager
 
 //        birthdays.put(userId, month + " " + day);
 
+
         JSONArray list = new JSONArray();
-        list.put(month);
-        list.put(day);
+        JSONObject obj = new JSONObject();
+        obj.put("month", month);
+        obj.put("day", day);
+        list.put(obj);
         birthdays.put(userId, list);
 
 //        JSONArray list = new JSONArray();
@@ -62,14 +70,14 @@ public class BirthdayManager
         System.out.println("Deleted birthday for " + userId);
     }
 
-    public void updateBirthday(String userId, int month, int day) throws IOException
-    {
-        FileWriter file = new FileWriter("birthdays.json");
-        birthdays.remove(userId);
-        birthdays.put(userId, month + " " + day);
-        file.write(birthdays.toString(4));
-        file.close();
-    }
+//    public void updateBirthday(String userId, int month, int day) throws IOException
+//    {
+//        FileWriter file = new FileWriter("birthdays.json");
+//        birthdays.remove(userId);
+//        birthdays.put(userId, month + " " + day);
+//        file.write(birthdays.toString(4));
+//        file.close();
+//    }
 
     public int[] returnBirthday(String id)
     {
@@ -84,12 +92,71 @@ public class BirthdayManager
         return birthdays.length();
     }
 
-    public void createBirthdayJobs()
+//    public void createBirthdayJobs()
+//    {
+//        for(int i = 0; i < numberOfBirthdays(); i++)
+//        {
+//
+//        }
+//    }
+    public void randomTesting()
     {
-        for(int i = 0; i < numberOfBirthdays(); i++)
+        Iterator<String> keys = birthdays.keys();
+        while(keys.hasNext())
         {
-
+            String key = keys.next();
+            System.out.println(key);
+            JSONArray val = birthdays.getJSONArray(key);
+//            int comp = val.getInt(0);
+            System.out.println(val);
+            int comp = val.getJSONObject(0).getInt("month");
+            System.out.println(comp);
         }
+    }
+    public ArrayList<String> todaysBirthdays()
+    {
+        ArrayList<String> users = new ArrayList<String>();
+
+        Calendar cal = Calendar.getInstance();
+        int tMonth = cal.get(Calendar.MONTH) + 1;
+        int tDay = cal.get(Calendar.DATE);
+
+        Iterator<String> keys = birthdays.keys();
+        while(keys.hasNext())
+        {
+            String key = keys.next();
+            JSONArray val = birthdays.getJSONArray(key);
+            int month = val.getJSONObject(0).getInt("month");
+            int day = val.getJSONObject(0).getInt("day");
+            if(tMonth == month && tDay == day) {
+                users.add(key);
+            }
+        }
+        return users;
+    }
+
+    public void startJob() throws SchedulerException
+    {
+        JobDetail job = JobBuilder.newJob(BirthdayJob.class)
+                .withIdentity("bdays")
+                .build();
+
+        CronTrigger trigger = TriggerBuilder.newTrigger()
+                .withSchedule(CronScheduleBuilder.cronSchedule("2 0 0 ? * * *"))
+                .build();
+
+        SchedulerFactory schFactory = new StdSchedulerFactory();
+        Scheduler sch = schFactory.getScheduler();
+        sch.start();
+        sch.scheduleJob(job, trigger);
+    }
+
+    public String getBirthday(String id)
+    {
+        JSONArray val = birthdays.getJSONArray(id);
+        int month = val.getJSONObject(0).getInt("month");
+        int day = val.getJSONObject(0).getInt("day");
+        return(month + "/" + day);
     }
 
 //    public static void addBirthday(String id, int month, int day)

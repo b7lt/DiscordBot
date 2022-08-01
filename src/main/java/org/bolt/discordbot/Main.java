@@ -13,6 +13,9 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
+import net.dv8tion.jda.api.utils.ChunkingFilter;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
+import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.bolt.discordbot.birthday.BirthdayManager;
 import org.jetbrains.annotations.NotNull;
 import org.quartz.SchedulerException;
@@ -30,11 +33,17 @@ public class Main extends ListenerAdapter
     private static JDA globalJDA;
     public static void main( String[] args ) throws LoginException, InterruptedException, SchedulerException, IOException {
 //        int daysUntilXMAS = ChristmasCountdown.getDaysUntil(Calendar.DECEMBER, 25);
-        ChristmasCountdown xmas = new ChristmasCountdown();
+        //ChristmasCountdown xmas = new ChristmasCountdown();
         JDA jda = JDABuilder.createDefault(getField("bot.token"))
 //                        .setActivity(Activity.playing(daysUntilXMAS + " Days until XMas"))
 //                .setActivity(Activity.playing(xmas.days() + " days, " + xmas.hours() + " hours, " + xmas.minutes() + " minutes, " + xmas.seconds() + " seconds until Christmas"))
                 .enableIntents(GatewayIntent.GUILD_MEMBERS)
+                .enableIntents(GatewayIntent.GUILD_PRESENCES)
+                .setChunkingFilter(ChunkingFilter.ALL)
+                .setMemberCachePolicy(MemberCachePolicy.ALL)
+                .enableCache(CacheFlag.ACTIVITY)
+                .addEventListeners(new Main())
+
                                 .build();
         jda.addEventListener(new Main(), new Commands());
 
@@ -51,7 +60,7 @@ public class Main extends ListenerAdapter
         );
         
         commands.addCommands(
-                new CommandData("addbirthday", "Add someone's birthday to the database")
+                new CommandData("setbirthday", "Add/change someone's birthday to the database")
                         .addOptions(new OptionData(OptionType.USER, "user", "The user whose birthday you wish to add").setRequired(true))
                         .addOptions(new OptionData(OptionType.INTEGER, "month", "The month of their birthday").setRequired(true))
                         .addOptions(new OptionData(OptionType.INTEGER, "day", "The day of their birthday").setRequired(true))
@@ -60,6 +69,11 @@ public class Main extends ListenerAdapter
         commands.addCommands(
                 new CommandData("removebirthday", "Remove someone's birthday from the database")
                         .addOptions(new OptionData(OptionType.USER, "user", "The user whose birthday you wish to remove").setRequired(true))
+        );
+
+        commands.addCommands(
+                new CommandData("getbirthday", "Get someone's birthday (if they have it set on the bot)")
+                        .addOptions(new OptionData(OptionType.USER, "user", "The user whose birthday you wish to get").setRequired(true))
         );
 
         commands.addCommands(
@@ -72,12 +86,22 @@ public class Main extends ListenerAdapter
                         .addOptions(new OptionData(OptionType.USER, "idiot", "the idiot who u wanna ghost ping").setRequired(true))
         );
 
+        commands.addCommands(
+                new CommandData("pingall", "pings everyone individually")
+                        .addOptions(new OptionData(OptionType.STRING,"msg", "add something before all pings").setRequired(false))
+        );
+
+        commands.addCommands(
+                new CommandData("kys", "suicide")
+        );
+
         commands.queue(); //queue it to discords servers
 
         //Schedulers.cronJob();
 //        Birthday test = new Birthday(11, 16, "183774018883682305");
 //        test.happyBirthday();
         BirthdayManager bdayM = new BirthdayManager();
+        bdayM.startJob();
 //        bdayM.addBirthday("fdffasf", 5, 20);
 //        bdayM.updateBirthday("fdasf", 4, 15);
 //        System.out.println("number of bday " + bdayM.numberOfBirthdays());

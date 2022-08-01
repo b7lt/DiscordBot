@@ -7,17 +7,26 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 public class BirthdayJob implements Job {
 
-    public void execute(JobExecutionContext jExeCtx) throws JobExecutionException {
-        JDA jda = Main.getBotInstance();
-        TextChannel textChannel = jda.getTextChannelById("907636473577218070");
-        assert textChannel != null;
-        String id = jExeCtx.getJobDetail().getJobDataMap().getString("userId");
-//        String message = String.format("Happy bday <@!%s>", id);
-        if(textChannel.canTalk()) {
-            textChannel.sendMessage(id).queue();
+    public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+        try {
+            BirthdayManager bdayM = new BirthdayManager();
+            ArrayList<String> userIds = bdayM.todaysBirthdays();
+            JDA jda = Main.getBotInstance();
+            TextChannel textChannel = jda.getTextChannelById("759472980572373004");
+            assert textChannel != null;
+            for(int i = 0; i < userIds.size(); i++)
+            {
+                if(textChannel.canTalk()) {
+                    textChannel.sendMessage("@everyone Happy Birthday <@!" + userIds.get(i) + ">! :partying_face::partying_face:").queue();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        System.out.println("Birthday job for " + id + " ran successfully");
     }
 }
