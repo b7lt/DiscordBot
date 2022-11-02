@@ -24,3 +24,6 @@ hs_err_pid*
 
 # File with tokens
 config.txt
+
+# Mac files
+*.DS_Store
