@@ -100,6 +100,7 @@ public class Commands extends ListenerAdapter
                         }
                     }
                     event.getChannel().sendMessage(message).queue();
+                    System.out.println(event.getUser().getName() + " pinged all with " + input);
                     event.reply("Pinged all with " + input).setEphemeral(false).queue();
                 }
                 catch(NullPointerException e)
@@ -113,7 +114,8 @@ public class Commands extends ListenerAdapter
                         }
                     }
                     event.getChannel().sendMessage(message).queue();
-                    event.reply("Pinged all with nothing").setEphemeral(true).queue();
+                    System.out.println(event.getUser().getName() + " pinged all");
+                    event.reply("Pinged all with nothing").setEphemeral(false).queue();
                 }
             break;
             }
