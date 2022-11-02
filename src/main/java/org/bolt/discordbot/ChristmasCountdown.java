@@ -64,7 +64,7 @@ public class ChristmasCountdown
         // specify the running period of the job
         Trigger trigger = TriggerBuilder.newTrigger()
                 .withSchedule(SimpleScheduleBuilder.simpleSchedule()
-                        .withIntervalInSeconds(12)
+                        .withIntervalInSeconds(20)
                         .repeatForever())
                 .build();
 
