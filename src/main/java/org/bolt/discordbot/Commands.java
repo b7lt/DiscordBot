@@ -100,7 +100,7 @@ public class Commands extends ListenerAdapter
                         }
                     }
                     event.getChannel().sendMessage(message).queue();
-                    event.reply("Pinged all with " + input).setEphemeral(true).queue();
+                    event.reply("Pinged all with " + input).setEphemeral(false).queue();
                 }
                 catch(NullPointerException e)
                 {
