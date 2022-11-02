@@ -1,11 +1,12 @@
 package org.bolt.discordbot;
 
 import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.entities.Emote;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.entities.Icon;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import net.dv8tion.jda.api.interactions.components.ComponentInteraction;
 import org.bolt.discordbot.birthday.BirthdayManager;
 import org.json.JSONException;
@@ -16,10 +17,10 @@ import java.net.MalformedURLException;
 import java.util.Base64;
 import java.util.Objects;
 
-public class Commands extends ListenerAdapter
+public class CustomCommands extends ListenerAdapter
 {
     @Override
-    public void onSlashCommand(SlashCommandEvent event)
+    public void onSlashCommandInteraction(SlashCommandInteractionEvent event)
     {
         if(event.getGuild() == null)
             return;
@@ -122,7 +123,7 @@ public class Commands extends ListenerAdapter
 
             case "kys": {
                 Member member = event.getMember();
-                event.getGuild().kick(member, "suicide").queue();
+                event.getGuild().kick(member).queue();
                 break;
             }
 
@@ -149,7 +150,7 @@ public class Commands extends ListenerAdapter
                     }
                     java.net.URL url = new java.net.URL(link);
                     InputStream is = url.openStream();
-                    event.getGuild().createEmote(emoteName, Icon.from(is)).queue();
+                    event.getGuild().createEmoji(emoteName, Icon.from(is)).queue();
                     String returnz;
                     if(animated){
                         returnz = "<a:" + emoteName + ":" + emoteId + ">";
@@ -169,7 +170,7 @@ public class Commands extends ListenerAdapter
         }
     }
 
-    private void test(SlashCommandEvent event, String userName)
+    private void test(SlashCommandInteractionEvent event, String userName)
     {
         event.reply("Hello, " + userName).queue();
     }

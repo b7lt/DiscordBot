@@ -3,13 +3,14 @@ package org.bolt.discordbot;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.entities.ChannelType;
-import net.dv8tion.jda.api.entities.TextChannel;
+
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
@@ -39,14 +40,15 @@ public class Main extends ListenerAdapter
                 .setActivity(Activity.playing(xmas.days() + " days, " + xmas.hours() + " hours, " + xmas.minutes() + " minutes, " + xmas.seconds() + " seconds until Christmas"))
                 .enableIntents(GatewayIntent.GUILD_MEMBERS)
                 .enableIntents(GatewayIntent.GUILD_PRESENCES)
+                .enableIntents(GatewayIntent.MESSAGE_CONTENT)
+                .enableIntents(GatewayIntent.GUILD_MESSAGES)
                 .setChunkingFilter(ChunkingFilter.ALL)
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .enableCache(CacheFlag.ACTIVITY)
-                .enableCache(CacheFlag.EMOTE)
-                .addEventListeners(new Main())
+                .enableCache(CacheFlag.EMOJI)
+                .addEventListeners(new Main(), new CustomCommands())
 
                                 .build();
-        jda.addEventListener(new Main(), new Commands());
 
         globalJDA = jda;
 
@@ -57,47 +59,47 @@ public class Main extends ListenerAdapter
 
         //list of cmds
         commands.addCommands(
-                new CommandData("test", "Test a response")
+                Commands.slash("test", "Test a response")
         );
         
         commands.addCommands(
-                new CommandData("setbirthday", "Add/change someone's birthday to the database")
+                Commands.slash("setbirthday", "Add/change someone's birthday to the database")
                         .addOptions(new OptionData(OptionType.USER, "user", "The user whose birthday you wish to add").setRequired(true))
                         .addOptions(new OptionData(OptionType.INTEGER, "month", "The month of their birthday").setRequired(true))
                         .addOptions(new OptionData(OptionType.INTEGER, "day", "The day of their birthday").setRequired(true))
         );
 
         commands.addCommands(
-                new CommandData("removebirthday", "Remove someone's birthday from the database")
+                Commands.slash("removebirthday", "Remove someone's birthday from the database")
                         .addOptions(new OptionData(OptionType.USER, "user", "The user whose birthday you wish to remove").setRequired(true))
         );
 
         commands.addCommands(
-                new CommandData("getbirthday", "Get someone's birthday (if they have it set on the bot)")
+                Commands.slash("getbirthday", "Get someone's birthday (if they have it set on the bot)")
                         .addOptions(new OptionData(OptionType.USER, "user", "The user whose birthday you wish to get").setRequired(true))
         );
 
         commands.addCommands(
-                new CommandData("updatestatus", "Update the bot's status message")
+                Commands.slash("updatestatus", "Update the bot's status message")
                         .addOptions(new OptionData(OptionType.STRING, "newstatus", "The new status message").setRequired(true))
         );
 
         commands.addCommands(
-                new CommandData("ghostping", "ghost ping an idiot")
+                Commands.slash("ghostping", "ghost ping an idiot")
                         .addOptions(new OptionData(OptionType.USER, "idiot", "the idiot who u wanna ghost ping").setRequired(true))
         );
 
         commands.addCommands(
-                new CommandData("pingall", "pings everyone individually")
+                Commands.slash("pingall", "pings everyone individually")
                         .addOptions(new OptionData(OptionType.STRING,"msg", "add something before all pings").setRequired(false))
         );
 
         commands.addCommands(
-                new CommandData("kys", "suicide")
+                Commands.slash("kys", "suicide")
         );
 
         commands.addCommands(
-                new CommandData("emotesteal", "steal an emote from another server")
+                Commands.slash("emotesteal", "steal an emote from another server")
                         .addOptions(new OptionData(OptionType.STRING, "emote", "steal this emote yo").setRequired(true))
         );
 
@@ -156,6 +158,10 @@ public class Main extends ListenerAdapter
                     .queue(message -> { // success callback
 //                        System.out.println("The second most recent message is: " + message.getContentDisplay());
                         int count = 1;
+                        if(message.getAuthor().isBot())
+                        {
+                            return;
+                        }
                         while(count<=5)
                         {
                             message.replyFormat("https://distok.top/stickers/754103543786504244/754108890559283200-small.gif").queue();
