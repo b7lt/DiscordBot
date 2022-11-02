@@ -128,21 +128,36 @@ public class Commands extends ListenerAdapter
             {
                 String bruh = event.getOption("emote").getAsString();
                 String emoteName = bruh.substring(2, bruh.indexOf(":", 2));
+                boolean animated = false;
 //                System.out.println(emoteName);
                 String emoteId = bruh.substring(bruh.indexOf(":", 2)+1, bruh.length()-1);
-//                String emoteId = bruh.substring(2, bruh.length()-1);
-//                System.out.println(emoteId);
-//                Emote emote = event.getJDA().getEmoteById(emoteId);
+                if(bruh.substring(1, 2).equals("a"))
+                {
+                    emoteName = bruh.substring(3, bruh.indexOf(":", 3));
+                    animated = true;
+                    emoteId = bruh.substring(bruh.indexOf(":", 3)+1, bruh.length()-1);
+                }
 
                 try {
 //                    java.net.URL url = new java.net.URL(emote.getImageUrl());
-                    String link = "https://cdn.discordapp.com/emojis/" + emoteId + ".webp?size=240&quality=lossless";
+                    String link = "https://cdn.discordapp.com/emojis/" + emoteId + ".webp?size=2048&quality=lossless";
+                    if(animated)
+                    {
+                        link = "https://cdn.discordapp.com/emojis/" + emoteId + ".gif?size=2048&quality=lossless";
+                    }
                     java.net.URL url = new java.net.URL(link);
                     InputStream is = url.openStream();
                     event.getGuild().createEmote(emoteName, Icon.from(is)).queue();
-                    event.reply("added " + bruh + " (probaby)").setEphemeral(true).queue();
+                    String returnz;
+                    if(animated){
+                        returnz = "<a:" + emoteName + ":" + emoteId + ">";
+                    }
+                    else {
+                        returnz = "<:" + emoteName + ":" + emoteId + ">";
+                    }
+                    event.reply("added " + returnz + " (probaby)").setEphemeral(false).queue();
                 } catch (IOException e) {
-                    event.reply("done fucked up").setEphemeral(true).queue();
+                    event.reply("done fucked up").setEphemeral(false).queue();
                     throw new RuntimeException(e);
                 }
                 break;
