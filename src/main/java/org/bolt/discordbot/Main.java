@@ -34,10 +34,10 @@ public class Main extends ListenerAdapter
     private static JDA globalJDA;
     public static void main( String[] args ) throws LoginException, InterruptedException, SchedulerException, IOException {
 //        int daysUntilXMAS = ChristmasCountdown.getDaysUntil(Calendar.DECEMBER, 25);
-        ChristmasCountdown xmas = new ChristmasCountdown();
+        // ChristmasCountdown xmas = new ChristmasCountdown();
         JDA jda = JDABuilder.createDefault(getField("bot.token"))
 //                        .setActivity(Activity.playing(daysUntilXMAS + " Days until XMas"))
-                .setActivity(Activity.playing(xmas.days() + " days, " + xmas.hours() + " hours, " + xmas.minutes() + " minutes, " + xmas.seconds() + " seconds until Christmas"))
+                // .setActivity(Activity.playing(xmas.days() + " days, " + xmas.hours() + " hours, " + xmas.minutes() + " minutes, " + xmas.seconds() + " seconds until Christmas"))
                 .enableIntents(GatewayIntent.GUILD_MEMBERS)
                 .enableIntents(GatewayIntent.GUILD_PRESENCES)
                 .enableIntents(GatewayIntent.MESSAGE_CONTENT)
@@ -52,7 +52,7 @@ public class Main extends ListenerAdapter
 
         globalJDA = jda;
 
-        ChristmasCountdown.statusChanger();
+        // ChristmasCountdown.statusChanger();
 
         //update cmd list
         CommandListUpdateAction commands = jda.updateCommands();
@@ -61,7 +61,7 @@ public class Main extends ListenerAdapter
         commands.addCommands(
                 Commands.slash("test", "Test a response")
         );
-        
+
         commands.addCommands(
                 Commands.slash("setbirthday", "Add/change someone's birthday to the database")
                         .addOptions(new OptionData(OptionType.USER, "user", "The user whose birthday you wish to add").setRequired(true))
