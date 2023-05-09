@@ -1,3 +1,12 @@
 Manifest-Version: 1.0
 Main-Class: org.bolt.discordbot.Main
+Class-Path: slf4j-api-1.7.36.jar JDA-5.0.0-beta.8.jar jna-4.4.0.jar okht
+ tp-4.10.0.jar kotlin-stdlib-jdk7-1.5.31.jar opus-java-api-1.1.1.jar oki
+ o-jvm-3.0.0.jar HikariCP-java7-2.4.13.jar kotlin-stdlib-1.6.20.jar json
+ -20210307.jar jackson-core-2.14.1.jar jackson-databind-2.14.1.jar nv-we
+ bsocket-client-2.14.jar mchange-commons-java-0.2.15.jar kotlin-stdlib-c
+ ommon-1.5.31.jar jackson-annotations-2.14.1.jar trove4j-3.0.3.jar opus-
+ java-1.1.1.jar quartz-2.3.2.jar kotlin-stdlib-jdk8-1.5.31.jar c3p0-0.9.
+ 5.4.jar opus-java-natives-1.1.1.jar annotations-13.0.jar commons-collec
+ tions4-4.4.jar
 

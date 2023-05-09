@@ -4,12 +4,20 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.entities.Icon;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.components.ComponentInteraction;
+import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 import org.bolt.discordbot.birthday.BirthdayManager;
+import org.bolt.discordbot.leetcode.LeetcodeScrape;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,6 +27,71 @@ import java.util.Objects;
 
 public class CustomCommands extends ListenerAdapter
 {
+    @Override
+    public void onGuildReady(@NotNull GuildReadyEvent event)
+    {
+        CommandListUpdateAction commands = event.getJDA().updateCommands();
+
+        //list of cmds
+        commands.addCommands(
+                Commands.slash("test", "Test a response")
+        );
+
+        commands.addCommands(
+                Commands.slash("setbirthday", "Add/change someone's birthday to the database")
+                        .addOptions(new OptionData(OptionType.USER, "user", "The user whose birthday you wish to add").setRequired(true))
+                        .addOptions(new OptionData(OptionType.INTEGER, "month", "The month of their birthday").setRequired(true))
+                        .addOptions(new OptionData(OptionType.INTEGER, "day", "The day of their birthday").setRequired(true))
+        );
+
+        commands.addCommands(
+                Commands.slash("removebirthday", "Remove someone's birthday from the database")
+                        .addOptions(new OptionData(OptionType.USER, "user", "The user whose birthday you wish to remove").setRequired(true))
+        );
+
+        commands.addCommands(
+                Commands.slash("getbirthday", "Get someone's birthday (if they have it set on the bot)")
+                        .addOptions(new OptionData(OptionType.USER, "user", "The user whose birthday you wish to get").setRequired(true))
+        );
+
+        commands.addCommands(
+                Commands.slash("updatestatus", "Update the bot's status message")
+                        .addOptions(new OptionData(OptionType.STRING, "newstatus", "The new status message").setRequired(true))
+        );
+
+        commands.addCommands(
+                Commands.slash("ghostping", "ghost ping an idiot")
+                        .addOptions(new OptionData(OptionType.USER, "idiot", "the idiot who u wanna ghost ping").setRequired(true))
+        );
+
+        commands.addCommands(
+                Commands.slash("pingall", "pings everyone individually")
+                        .addOptions(new OptionData(OptionType.STRING,"msg", "add something before all pings").setRequired(false))
+        );
+
+        commands.addCommands(
+                Commands.slash("kys", "suicide")
+        );
+
+        commands.addCommands(
+                Commands.slash("emotesteal", "steal an emote from another server")
+                        .addOptions(new OptionData(OptionType.STRING, "emote", "steal this emote yo").setRequired(true))
+        );
+
+
+        OptionData difficulty = new OptionData(OptionType.STRING, "difficulty", "Which difficulty? (if left blank, random difficulty)", false)
+                .addChoice("Easy", "easy")
+                .addChoice("Medium", "medium")
+                .addChoice("Hard", "hard");
+        OptionData paid = new OptionData(OptionType.BOOLEAN, "paid", "Include paid questions? (if left blank, only free are included)", false);
+        commands.addCommands(
+                Commands.slash("leetcode", "Get a random leetcode problem")
+                        .addOptions(difficulty, paid)
+        );
+
+        commands.queue(); //queue it to discords servers
+    }
+
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event)
     {
@@ -164,6 +237,14 @@ public class CustomCommands extends ListenerAdapter
                     throw new RuntimeException(e);
                 }
                 break;
+            }
+            case "leetcode":
+            {
+                boolean paid = event.getOption("paid").getAsBoolean();
+                String difficulty = event.getOption("difficulty").getAsString();
+                JSONObject test = LeetcodeScrape.leetcodeQuestion(difficulty, paid);
+                String PROBLEMS_BASEURL = "https://leetcode.com/problems/";
+                event.reply(PROBLEMS_BASEURL + test.getJSONObject("stat").getString("question__title_slug")).queue();
             }
             default:
                 event.reply("I can't handle that command right now :(").setEphemeral(true).queue();

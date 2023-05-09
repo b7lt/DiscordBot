@@ -28,6 +28,9 @@ public class BirthdayManager
     public JSONObject parseJSONFile(String filename) throws JSONException, IOException
     {
         String content = new String(Files.readAllBytes(Paths.get(filename)));
+
+
+        
         return new JSONObject(content);
     }
 

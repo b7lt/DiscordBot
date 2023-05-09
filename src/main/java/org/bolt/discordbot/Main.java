@@ -3,8 +3,9 @@ package org.bolt.discordbot;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
-
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.sticker.StickerSnowflake;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -12,6 +13,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
@@ -54,92 +56,25 @@ public class Main extends ListenerAdapter
 
         // ChristmasCountdown.statusChanger();
 
-        //update cmd list
-        CommandListUpdateAction commands = jda.updateCommands();
 
-        //list of cmds
-        commands.addCommands(
-                Commands.slash("test", "Test a response")
-        );
-
-        commands.addCommands(
-                Commands.slash("setbirthday", "Add/change someone's birthday to the database")
-                        .addOptions(new OptionData(OptionType.USER, "user", "The user whose birthday you wish to add").setRequired(true))
-                        .addOptions(new OptionData(OptionType.INTEGER, "month", "The month of their birthday").setRequired(true))
-                        .addOptions(new OptionData(OptionType.INTEGER, "day", "The day of their birthday").setRequired(true))
-        );
-
-        commands.addCommands(
-                Commands.slash("removebirthday", "Remove someone's birthday from the database")
-                        .addOptions(new OptionData(OptionType.USER, "user", "The user whose birthday you wish to remove").setRequired(true))
-        );
-
-        commands.addCommands(
-                Commands.slash("getbirthday", "Get someone's birthday (if they have it set on the bot)")
-                        .addOptions(new OptionData(OptionType.USER, "user", "The user whose birthday you wish to get").setRequired(true))
-        );
-
-        commands.addCommands(
-                Commands.slash("updatestatus", "Update the bot's status message")
-                        .addOptions(new OptionData(OptionType.STRING, "newstatus", "The new status message").setRequired(true))
-        );
-
-        commands.addCommands(
-                Commands.slash("ghostping", "ghost ping an idiot")
-                        .addOptions(new OptionData(OptionType.USER, "idiot", "the idiot who u wanna ghost ping").setRequired(true))
-        );
-
-        commands.addCommands(
-                Commands.slash("pingall", "pings everyone individually")
-                        .addOptions(new OptionData(OptionType.STRING,"msg", "add something before all pings").setRequired(false))
-        );
-
-        commands.addCommands(
-                Commands.slash("kys", "suicide")
-        );
-
-        commands.addCommands(
-                Commands.slash("emotesteal", "steal an emote from another server")
-                        .addOptions(new OptionData(OptionType.STRING, "emote", "steal this emote yo").setRequired(true))
-        );
-
-        commands.queue(); //queue it to discords servers
-
-        //Schedulers.cronJob();
-//        Birthday test = new Birthday(11, 16, "183774018883682305");
-//        test.happyBirthday();
         BirthdayManager bdayM = new BirthdayManager();
         bdayM.startJob();
-//        bdayM.addBirthday("fdffasf", 5, 20);
-//        bdayM.updateBirthday("fdasf", 4, 15);
-//        System.out.println("number of bday " + bdayM.numberOfBirthdays());
-//        System.out.println(ChristmasCountdown.newGetTimeUntil(Calendar.DECEMBER, 25));
     }
 
-//    @Override
-//    public void onMessageReceived(@NotNull MessageReceivedEvent event)
-//    {
-//        if(event.isFromType(ChannelType.PRIVATE))
-//            System.out.printf("[PM] %s: %s\n",
-//                    event.getAuthor().getName(),
-//                    event.getMessage().getContentDisplay()
-//            );
-//        else {
-//            System.out.printf("[%s][%s] %s: %s\n", event.getGuild().getName(),
-//                    event.getTextChannel().getName(), Objects.requireNonNull(event.getMember()).getEffectiveName(),
-//                    event.getMessage().getContentDisplay());
-////            if(event.getAuthor().getId().equals("247392250470858752")) event.getTextChannel().sendMessage("frank kekw").queue();
-//        }
-//    }
-//
-//    @Override
-//    public void onMessageReceived(@NotNull MessageReceivedEvent event)
-//    {
-//        if(event.getAuthor().getId().equals("464507275189682176"))
-//        {
-//            event.getMessage().delete().queue();
-//        }
-//    }
+
+    @Override
+    public void onMessageReceived(@NotNull MessageReceivedEvent event)
+    {
+        String msg = event.getMessage().getContentRaw().toLowerCase();
+        if(msg.contains("get") && msg.contains("<@616280451962765312>"))
+        {
+            User target = event.getMessage().getReferencedMessage().getAuthor();
+            String payload = String.format("yo %s", target.getAsMention());
+            event.getMessage().reply(payload).queue();
+
+        }
+    }
+
 
     @Override
     public void onGuildMemberJoin(@NotNull GuildMemberJoinEvent event)
@@ -165,6 +100,7 @@ public class Main extends ListenerAdapter
                         while(count<=5)
                         {
                             message.replyFormat("https://distok.top/stickers/754103543786504244/754108890559283200-small.gif").queue();
+                            // message.replyStickers(StickerSnowflake.fromId("749054660769218631")).queue();
                             count++;
                         }
 
