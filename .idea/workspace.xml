@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ArtifactsWorkspaceSettings">
     <artifacts-to-build>
-      <artifact name="DiscordBot:jar" />
+      <artifact name="BruhBot:jar" />
     </artifacts-to-build>
   </component>
   <component name="AutoImportSettings">
@@ -10,13 +10,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b3e8d32f-f353-40ec-a423-59033f849b09" name="Changes" comment="Leetcode fully implemented w/ job">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/bolt/discordbot/leetcode/LeetcodeJob.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/birthdays.json" beforeDir="false" afterPath="$PROJECT_DIR$/birthdays.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/bolt/discordbot/CustomCommands.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/bolt/discordbot/CustomCommands.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/bolt/discordbot/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/bolt/discordbot/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/bolt/discordbot/leetcode/LeetcodeScrape.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/bolt/discordbot/leetcode/LeetcodeScrape.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/META-INF/MANIFEST.MF" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,6 +37,9 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="jar://$USER_HOME$/Library/Java/JavaVirtualMachines/openjdk-18.0.2/Contents/Home/lib/src.zip!/java.base/java/util/Random.java" root0="SKIP_INSPECTION" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -76,22 +74,38 @@
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
     "project.structure.last.edited": "Artifacts",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.lookFeel"
+    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Docker.Dockerfile">
     <configuration name="DiscordBot" type="Application" factoryName="Application">
       <option name="ALTERNATIVE_JRE_PATH" value="17" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="org.bolt.discordbot.Main" />
       <module name="DiscordBot" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Dockerfile" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
+      <deployment type="dockerfile">
+        <settings>
+          <option name="imageTag" value="bruhbot" />
+          <option name="buildCliOptions" value="--platform linux/amd64" />
+          <option name="containerName" value="BruhBot" />
+          <option name="sourceFilePath" value="Dockerfile" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Application.DiscordBot" />
+      <item itemvalue="Docker.Dockerfile" />
+    </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -109,6 +123,7 @@
       <workItem from="1663364910159" duration="302000" />
       <workItem from="1663365958471" duration="130000" />
       <workItem from="1663366133820" duration="4000" />
+      <workItem from="1683628957795" duration="2595000" />
     </task>
     <task id="LOCAL-00001" summary="aaa">
       <created>1659338800252</created>

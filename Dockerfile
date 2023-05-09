@@ -1,6 +1,6 @@
-FROM amazoncorretto:latest
+FROM eclipse-temurin:18
 RUN mkdir /opt/app
-COPY DiscordBot.jar /opt/app
+COPY out/artifacts/BruhBot_jar/DiscordBot.jar /opt/app
 COPY birthdays.json /opt/app
 COPY config.txt /opt/app
 WORKDIR /opt/app
