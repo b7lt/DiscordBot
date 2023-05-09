@@ -31,16 +31,8 @@ public class LeetcodeScrape {
         }
     }
 
-    public static JSONObject leetcodeQuestion(String diff, boolean paid)
+    public static JSONObject leetcodeQuestion(int difficulty, boolean paid)
     {
-        int difficulty;
-        switch(diff)
-        {
-            case "easy": difficulty = 1;
-            case "medium": difficulty = 2;
-            case "hard": difficulty = 3;
-            default: difficulty = 0;
-        }
         JSONObject rawLeetcode = scrapeJSON();
         if(rawLeetcode==null) return null;
         JSONArray problemsJSON = rawLeetcode.getJSONArray("stat_status_pairs");
@@ -61,7 +53,7 @@ public class LeetcodeScrape {
 
         if(!paid)
         {
-            ArrayList<JSONObject> filtered = new ArrayList<>();
+            filtered = new ArrayList<>();
             for (int i = 0; i < problems.size(); i++) {
                 JSONObject question = problems.get(i);
                 if(!question.getBoolean("paid_only"))

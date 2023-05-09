@@ -20,12 +20,14 @@ import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.bolt.discordbot.birthday.BirthdayManager;
+import org.bolt.discordbot.leetcode.LeetcodeJob;
 import org.jetbrains.annotations.NotNull;
 import org.quartz.SchedulerException;
 
 import javax.security.auth.login.LoginException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Properties;
@@ -59,6 +61,7 @@ public class Main extends ListenerAdapter
 
         BirthdayManager bdayM = new BirthdayManager();
         bdayM.startJob();
+        LeetcodeJob.startJob();
     }
 
 
@@ -127,5 +130,18 @@ public class Main extends ListenerAdapter
             System.out.println("getProperty IOException");
         }
         return(properties.getProperty(field));
+    }
+    public static void setField(String field, String value) throws IOException {
+        Properties properties = new Properties();
+        String fileName = "config.txt";
+        try (FileInputStream fis = new FileInputStream(fileName)) {
+            properties.load(fis);
+        } catch (FileNotFoundException ex) {
+            System.out.println("getPropety() FileNotFoundException");
+        } catch (IOException ex) {
+            System.out.println("getProperty IOException");
+        }
+        properties.setProperty(field, value);
+        properties.store(new FileOutputStream("config.txt"), null);
     }
 }

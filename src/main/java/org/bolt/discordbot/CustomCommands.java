@@ -1,5 +1,6 @@
 package org.bolt.discordbot;
 
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.entities.Icon;
@@ -7,18 +8,21 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.components.ComponentInteraction;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import org.bolt.discordbot.birthday.BirthdayManager;
 import org.bolt.discordbot.leetcode.LeetcodeScrape;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -79,14 +83,24 @@ public class CustomCommands extends ListenerAdapter
         );
 
 
-        OptionData difficulty = new OptionData(OptionType.STRING, "difficulty", "Which difficulty? (if left blank, random difficulty)", false)
-                .addChoice("Easy", "easy")
-                .addChoice("Medium", "medium")
-                .addChoice("Hard", "hard");
+        OptionData difficulty = new OptionData(OptionType.INTEGER, "difficulty", "Which difficulty? (if left blank, random difficulty)", false)
+                .addChoice("Easy", 1)
+                .addChoice("Medium", 2)
+                .addChoice("Hard", 3);
         OptionData paid = new OptionData(OptionType.BOOLEAN, "paid", "Include paid questions? (if left blank, only free are included)", false);
         commands.addCommands(
                 Commands.slash("leetcode", "Get a random leetcode problem")
                         .addOptions(difficulty, paid)
+        );
+
+
+        OptionData difficultyR = new OptionData(OptionType.INTEGER, "difficulty", "Which difficulty? (if left blank, random difficulty)", true)
+                .addChoice("Easy", 1)
+                .addChoice("Medium", 2)
+                .addChoice("Hard", 3);
+        commands.addCommands(
+                Commands.slash("dailylcdiff", "Set the daily leetcode difficulty")
+                        .addOptions(difficultyR)
         );
 
         commands.queue(); //queue it to discords servers
@@ -240,11 +254,62 @@ public class CustomCommands extends ListenerAdapter
             }
             case "leetcode":
             {
-                boolean paid = event.getOption("paid").getAsBoolean();
-                String difficulty = event.getOption("difficulty").getAsString();
-                JSONObject test = LeetcodeScrape.leetcodeQuestion(difficulty, paid);
+                int difficulty = event.getOption("difficulty", 1 + (int)(Math.random() * 3), OptionMapping::getAsInt);
+                boolean paid = event.getOption("paid", false, OptionMapping::getAsBoolean);
+                JSONObject qu = LeetcodeScrape.leetcodeQuestion(difficulty, paid);
                 String PROBLEMS_BASEURL = "https://leetcode.com/problems/";
-                event.reply(PROBLEMS_BASEURL + test.getJSONObject("stat").getString("question__title_slug")).queue();
+
+                EmbedBuilder eb = new EmbedBuilder();
+                eb.setTitle(String.format("%d. %s", qu.getJSONObject("stat").getInt("frontend_question_id"), qu.getJSONObject("stat").getString("question__title")), PROBLEMS_BASEURL + qu.getJSONObject("stat").getString("question__title_slug"));
+                eb.setDescription("Random Leetcode Question");
+                difficulty = qu.getJSONObject("difficulty").getInt("level");
+                switch(difficulty)
+                {
+                    case 1: {
+                        eb.addField("Difficulty", "Easy", true);
+                        eb.setColor(Color.GREEN);
+                        break;
+                    }
+                    case 2: {
+                        eb.addField("Difficulty", "Medium", true);
+                        eb.setColor(Color.ORANGE);
+                        break;
+                    }
+                    case 3: {
+                        eb.addField("Difficulty", "Hard", true);
+                        eb.setColor(Color.RED);
+                        break;
+                    }
+                }
+
+                eb.addField("Paid Question", String.valueOf(qu.getBoolean("paid_only")), true);
+                eb.addBlankField(false);
+                int submissions = qu.getJSONObject("stat").getInt("total_submitted");
+                int acceptions = qu.getJSONObject("stat").getInt("total_acs");
+                eb.addField("Submissions", String.valueOf(submissions), true);
+                eb.addField("Acceptions", String.valueOf(acceptions), true);
+                eb.addField("Acceptance Rate", String.valueOf((float) acceptions / submissions * 100) + "%", true);
+                eb.setThumbnail("https://leetcode.com/static/images/LeetCode_logo_rvs.png");
+
+
+                event.reply("").
+                        setEmbeds(eb.build())
+                        .addActionRow(
+                                Button.link(PROBLEMS_BASEURL + qu.getJSONObject("stat").getString("question__title_slug"), "Link to Problem")
+                        ).queue();
+                break;
+            }
+            case "dailylcdiff": {
+                int difficulty = event.getOption("difficulty").getAsInt();
+                try {
+                    Main.setField("lcDifficulty", String.valueOf(difficulty));
+                    event.reply("Set difficulty to " + difficulty).queue();
+                } catch (IOException e) {
+                    event.reply("failed").queue();
+                    throw new RuntimeException(e);
+
+                }
+                break;
             }
             default:
                 event.reply("I can't handle that command right now :(").setEphemeral(true).queue();
