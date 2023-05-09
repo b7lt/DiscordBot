@@ -1,4 +1,4 @@
-FROM eclipse-temurin:18
+FROM amazoncorretto:17-alpine
 RUN mkdir /opt/app
 COPY out/artifacts/BruhBot_jar/DiscordBot.jar /opt/app
 COPY birthdays.json /opt/app

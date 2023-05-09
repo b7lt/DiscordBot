@@ -9,7 +9,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b3e8d32f-f353-40ec-a423-59033f849b09" name="Changes" comment="Leetcode fully implemented w/ job">
+    <list default="true" id="b3e8d32f-f353-40ec-a423-59033f849b09" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
     </list>
@@ -123,7 +123,7 @@
       <workItem from="1663364910159" duration="302000" />
       <workItem from="1663365958471" duration="130000" />
       <workItem from="1663366133820" duration="4000" />
-      <workItem from="1683628957795" duration="2595000" />
+      <workItem from="1683628957795" duration="3300000" />
     </task>
     <task id="LOCAL-00001" summary="aaa">
       <created>1659338800252</created>
@@ -139,7 +139,14 @@
       <option name="project" value="LOCAL" />
       <updated>1659343004204</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Docker changes">
+      <created>1683631897103</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1683631897103</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -149,6 +156,7 @@
     <MESSAGE value="aaa" />
     <MESSAGE value="added /emotesteal" />
     <MESSAGE value="Leetcode fully implemented w/ job" />
-    <option name="LAST_COMMIT_MESSAGE" value="Leetcode fully implemented w/ job" />
+    <MESSAGE value="Docker changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Docker changes" />
   </component>
 </project>
